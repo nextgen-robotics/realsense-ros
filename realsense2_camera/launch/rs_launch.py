@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#VERSIONE ORIGINALE
 """Launch realsense2_camera node."""
 import os
 from launch import LaunchDescription
@@ -23,12 +24,13 @@ from launch.conditions import IfCondition
 
 
 configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
+                           # {'name': 'ip_address',                   'default': '192.168.1.25', 'description': 'ip address'},
                            {'name': 'serial_no',                    'default': "''", 'description': 'choose device by serial number'},
                            {'name': 'usb_port_id',                  'default': "''", 'description': 'choose device by usb port id'},
                            {'name': 'device_type',                  'default': "''", 'description': 'choose device by type'},
                            {'name': 'config_file',                  'default': "''", 'description': 'yaml config file'},
                            {'name': 'enable_pointcloud',            'default': 'false', 'description': 'enable pointcloud'},
-                           {'name': 'unite_imu_method',             'default': "''", 'description': '[copy|linear_interpolation]'},
+                           {'name': 'unite_imu_method',             'default': "'linear_interpolation'", 'description': '[copy|linear_interpolation]'},
                            {'name': 'json_file_path',               'default': "''", 'description': 'allows advanced configuration'},
                            {'name': 'log_level',                    'default': 'info', 'description': 'debug log level [DEBUG|INFO|WARN|ERROR|FATAL]'},
                            {'name': 'output',                       'default': 'screen', 'description': 'pipe node output [screen|log]'},
@@ -63,20 +65,24 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'fisheye_qos',                  'default': 'SYSTEM_DEFAULT', 'description': 'QoS profile name'},
                            {'name': 'infra_qos',                    'default': 'SYSTEM_DEFAULT', 'description': 'QoS profile name'},
                            {'name': 'pointcloud_qos',               'default': 'SYSTEM_DEFAULT', 'description': 'QoS profile name'},
-                           {'name': 'enable_gyro',                  'default': 'false', 'description': ''},
-                           {'name': 'enable_accel',                 'default': 'false', 'description': ''},
+                           {'name': 'gyro_qos',                     'default': 'SENSOR_DATA', 'description': 'QoS profile name'},
+                           {'name': 'imu_qos',                      'default': 'SENSOR_DATA', 'description': 'QoS profile name'},
+                           {'name': 'enable_gyro',                  'default': 'true', 'description': ''},
+                           {'name': 'enable_accel',                 'default': 'true', 'description': ''},
                            {'name': 'pointcloud_texture_stream',    'default': 'RS2_STREAM_COLOR', 'description': 'testure stream for pointcloud'},
                            {'name': 'pointcloud_texture_index',     'default': '0', 'description': 'testure stream index for pointcloud'},
-                           {'name': 'enable_sync',                  'default': 'false', 'description': ''},
-                           {'name': 'align_depth',                  'default': 'false', 'description': ''},
+                           {'name': 'enable_sync',                  'default': 'true', 'description': ''},
+                           {'name': 'align_depth',                  'default': 'true', 'description': ''},
                            {'name': 'filters',                      'default': "''", 'description': ''},
                            {'name': 'clip_distance',                'default': '-2.', 'description': ''},
                            {'name': 'linear_accel_cov',             'default': '0.01', 'description': ''},
+                           {'name': 'angular_velocity_cov',         'default': '0.0000001', 'description': ''},
                            {'name': 'initial_reset',                'default': 'false', 'description': ''},
                            {'name': 'allow_no_texture_points',      'default': 'false', 'description': ''},
                            {'name': 'ordered_pc',                   'default': 'false', 'description': ''},
                            {'name': 'calib_odom_file',              'default': "''", 'description': "''"},
                            {'name': 'topic_odom_in',                'default': "''", 'description': 'topic for T265 wheel odometry'},
+                           {'name': 'publish_tf',                   'default': "true", 'description': 'Flag enabling/disabling the publishing of TFs'},
                            {'name': 'tf_publish_rate',              'default': '0.0', 'description': 'Rate of publishing static_tf'},
                            {'name': 'diagnostics_period',           'default': '0.0', 'description': 'Rate of publishing diagnostics. 0=Disabled'},
                            {'name': 'rosbag_filename',              'default': "''", 'description': 'A realsense bagfile to run from as a device'},
@@ -87,6 +93,8 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'stereo_module.gain.2',         'default': '16', 'description': 'Initial value for hdr_merge filter'},
                            {'name': 'wait_for_device_timeout',      'default': '-1.', 'description': 'Timeout for waiting for device to connect (Seconds)'},
                            {'name': 'reconnect_timeout',            'default': '6.', 'description': 'Timeout(seconds) between consequtive reconnection attempts'},
+                           {'name': 'depth_module.emitter_enabled', 'default': '1', 'description': 'Make sure IR emitter is enabled'}
+
                           ]
 
 def declare_configurable_parameters(parameters):

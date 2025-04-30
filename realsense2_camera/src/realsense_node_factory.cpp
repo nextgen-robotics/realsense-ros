@@ -171,8 +171,8 @@ void RealSenseNodeFactory::getDevice(rs2::device_list list)
 			}
 		}
 	}
-
-	bool remove_tm2_handle(_device && RS_T265_PID != std::stoi(_device.get_info(RS2_CAMERA_INFO_PRODUCT_ID), 0, 16));
+	std::cout << _device.get_info(RS2_CAMERA_INFO_PRODUCT_ID) << std::endl;
+	bool remove_tm2_handle(_device && RS_T265_PID != std::stoi("1", 0, 16));
 	if (remove_tm2_handle)
 	{
 		_ctx.unload_tracking_module();
@@ -343,7 +343,8 @@ void RealSenseNodeFactory::startDevice()
 {
 	if (_realSenseNode) _realSenseNode.reset();
 	std::string pid_str(_device.get_info(RS2_CAMERA_INFO_PRODUCT_ID));
-	uint16_t pid = std::stoi(pid_str, 0, 16);
+	uint16_t pid = std::stoi("1", 0, 16);
+	pid = RS435i_RGB_PID;
 	try
 	{
 		switch(pid)
