@@ -10,7 +10,7 @@ namespace realsense2_camera
                 _logger(rclcpp::get_logger("RealSenseCameraNode"))
                 {};
             ~ParametersBackend();
-            void add_on_set_parameters_callback(rclcpp::node_interfaces::NodeParametersInterface::OnSetParametersCallbackType callback);
+            void add_on_set_parameters_callback(rclcpp::node_interfaces::NodeParametersInterface::OnParametersSetCallbackType callback);
 
 
         private:
